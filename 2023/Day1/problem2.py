@@ -42,14 +42,14 @@ def first_and_last_string(line: str) -> int:
         return int(left + left)
     return int(left + right)
 
-path = Path.cwd()/'Day1'/'d1p2testdata.txt'
+path = Path.cwd()/'2023'/'Day1'/'d1p2testdata.txt'
 with path.open() as test_data:
     total = 0
     for line in test_data:
         total += first_and_last_string(line)
 assert total == 281
 
-path = Path.cwd()/'Day1'/'d1p1data.txt'
+path = Path.cwd()/'2023'/'Day1'/'d1p1data.txt'
 with path.open() as test_data:
     total = 0
     for line in test_data:
