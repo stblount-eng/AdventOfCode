@@ -19,17 +19,19 @@ def is_possible(game):
             return True
         return False
 
-path = Path.cwd()/'2023'/'Day2'/'d2p1testdata.txt'
+path = Path.cwd()/'Day2'/'d2p1testdata.txt'
 with path.open() as test_data:
     total = 0
     for i, game in enumerate(test_data):
         if is_possible(game):
-            total += i
-            print(i)
+            total += i + 1
 
 assert total == 8
 
-# path = Path.cwd()/'2023'/'Day2'/'d1p1data.txt'
-# with path.open() as test_data:
-#     total = 0
-# print(total)
+path = Path.cwd()/'Day2'/'d2p1data.txt'
+with path.open() as test_data:
+    total = 0
+    for i, game in enumerate(test_data):
+        if is_possible(game):
+            total += i + 1
+print(total)
