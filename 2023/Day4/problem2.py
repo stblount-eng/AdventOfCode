@@ -1,8 +1,8 @@
 from pathlib import Path
 import re
 
-test_path = Path.cwd()/'Day4'/'d4p1testdata.txt'
-path = Path.cwd()/'Day4'/'d4p1data.txt'
+test_path = Path.cwd()/'2023'/'Day4'/'d4p1testdata.txt'
+path = Path.cwd()/'2023'/'Day4'/'d4p1data.txt'
 
 def process_card(card):
     card = re.sub(r'(Card[ 0-9]*:)', '', card).strip()
@@ -29,17 +29,28 @@ def total_points(path):
             points += card_points
     return points
 
-assert total_points(test_path) == 13
-print(total_points(path))
+# assert total_points(test_path) == 13
+# print(total_points(path))
 
 def total_cards(path):
     with path.open() as data:
         card_total = 0
         card_repeats = {}
-        for card_num, card in enumerate(data):
+        for current_card, card in enumerate(data):
+            if current_card not in card_repeats:
+                card_repeats[current_card] = 0
+            card_repeats[current_card] += 1
             winners, numbers = process_card(card)
             card_points = 0
             for number in numbers:
                 if number in winners:
                     card_points += 1
-    return points
+            for card_to_dup in range(current_card + 1, current_card + card_points + 1):
+                if card_to_dup not in card_repeats:
+                    card_repeats[card_to_dup] = card_repeats[current_card]
+                else:
+                    card_repeats[card_to_dup] += card_repeats[current_card]
+    return sum(card_repeats.values())
+
+assert total_cards(test_path) == 30
+print(total_cards(path))
