@@ -2,8 +2,8 @@ from pathlib import Path
 import re
 import cProfile
 
-test_path = Path.cwd()/'2023'/'Day5'/'d5p1testdata.txt'
-path = Path.cwd()/'2023'/'Day5'/'d5p1data.txt'
+test_path = Path.cwd()/'Day5'/'d5p1testdata.txt'
+path = Path.cwd()/'Day5'/'d5p1data.txt'
 
 def get_seed_generator(seed_start, seed_end):
     seed = seed_start
@@ -23,7 +23,7 @@ def get_seeds(first_line: str) -> list[tuple]:
     return seeds
 
 def get_map_function(data):
-    map_function = {}
+    map_function = []
     for line in data:
         line = line.strip()
         if line != '' and line[0].isalpha():
@@ -52,16 +52,13 @@ def lowest_location(path):
     with path.open() as data:
         seed_ranges = get_seeds(data.readline())
         map_function = get_map_function(data)
-    min_location = float('inf')
-    for seed_range in seed_ranges:
-        seed_gen = get_seed_generator(seed_range[0], seed_range[1])
-        for seed in seed_gen:
-            for transforms in map_function:
-                seed = seed_transform(seed, map_function[transforms])
-            if seed < min_location:
-                min_location = seed
+    new_seeds = []
+    while seed_ranges:
+        start, end = seed_ranges.pop()
+        for m in map_function:
+
 
     return min_location
-# assert lowest_location(test_path) == 46
-# print(lowest_location(path))
-cProfile.run('lowest_location(path)')
+assert lowest_location(test_path) == 46
+print(lowest_location(path))
+# cProfile.run('lowest_location(path)')
