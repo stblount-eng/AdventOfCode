@@ -1,10 +1,22 @@
 from pathlib import Path
 from collections import Counter
 import re
+from math import gcd
 
-test_path1 = Path.cwd()/'2023'/'Day8'/'d8p1testdata1.txt'
-test_path2 = Path.cwd()/'2023'/'Day8'/'d8p1testdata2.txt'
+test_path = Path.cwd()/'2023'/'Day8'/'d8p2testdata.txt'
 path = Path.cwd()/'2023'/'Day8'/'d8p1data.txt'
+
+def number_of_steps_single(name, nodes, instructions):
+    steps = 1
+    i = 0
+    while True:
+        name = nodes[name][instructions[i]]
+        if name[2] == 'Z':
+            return steps
+        i += 1
+        steps += 1
+        if i == len(instructions):
+            i = 0
 
 def number_of_steps(path):
     with path.open() as data:
@@ -18,18 +30,14 @@ def number_of_steps(path):
             'L': vals[1],
             'R': vals[2]
         }
-    i = 0
-    start_names = re.findall(r'([A-Z]{2})A', nodes.keys())
-    steps = 1
-    while True:
-        name = nodes[name][instructions[i]]
-        if name == 'ZZZ':
-            return steps
-        i += 1
-        steps += 1
-        if i == len(instructions):
-            i = 0
+    names = [node for node in nodes.keys() if node[2]=='A']
+    min_steps = []
+    for name in names:
+        min_steps.append(number_of_steps_single(name, nodes, instructions))
+    lcm = 1
+    for step in min_steps:
+        lcm = lcm*step//gcd(lcm, step)
+    return lcm
 
-assert number_of_steps(test_path1) == 2
-assert number_of_steps(test_path2) == 6
+assert number_of_steps(test_path) == 6
 print(number_of_steps(path))
