@@ -15,6 +15,32 @@ def next_pipe(adj_pipes, current_dir):
         'F': ['S','E'],
     }
 
+def pipe_exit(pipe, entry):
+    match pipe:
+        case '|':
+            if entry == 'N':
+                return 'S'
+            return 'N'
+        case '-':
+            if entry == 'E':
+                return 'W'
+            return 'E'
+        case 'L':
+            if entry == 'N':
+                return 'E'
+            return 'N'
+        case 'J':
+            if entry == 'N':
+                return 'W'
+            return 'N'
+        case '7':
+            if entry == 'S':
+                return 'W'
+            return 'S'
+        case 'F':
+            if entry == 'S':
+                return 'E'
+            return 'S'
 
 def max_distance(path):
     max_distance = 0
