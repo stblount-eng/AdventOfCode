@@ -7,11 +7,11 @@ type NotPipe = Literal['.', 'S']
 type PipeMap = list[list[Pipe | NotPipe]]
 type PipeRoute = list[tuple[int, int]]
 
-test_path1 = Path.cwd()/'Day10'/'d10p1testdata1.txt'
-test_path2 = Path.cwd()/'Day10'/'d10p1testdata2.txt'
-test_path3 = Path.cwd()/'Day10'/'d10p2testdata1.txt'
-test_path4 = Path.cwd()/'Day10'/'d10p2testdata2.txt'
-path = Path.cwd()/'Day10'/'d10p1data.txt'
+test_path1 = Path.cwd()/'2023'/'Day10'/'d10p1testdata1.txt'
+test_path2 = Path.cwd()/'2023'/'Day10'/'d10p1testdata2.txt'
+test_path3 = Path.cwd()/'2023'/'Day10'/'d10p2testdata1.txt'
+test_path4 = Path.cwd()/'2023'/'Day10'/'d10p2testdata2.txt'
+path = Path.cwd()/'2023'/'Day10'/'d10p1data.txt'
 
 def move(direction: Compass) -> list[int]:
     match direction:
@@ -112,11 +112,10 @@ def is_enclosed(posx: int, posy: int) -> bool:
 def num_tiles(path: object) -> int:
     pipemap, start = create_pipe_map(path)
     pipe_route = create_pipe_route(pipemap, start)
-    tiles = polygonArea(pipe_route)
-    return tiles
+    inner_tiles = polygonArea(pipe_route) - (len(pipe_route)/2) + 1
+    return int(inner_tiles)
 
 def polygonArea(vertices: PipeRoute) -> int:
-  #A function to apply the Shoelace algorithm
   numberOfVertices = len(vertices)
   sum1 = 0
   sum2 = 0
@@ -125,9 +124,7 @@ def polygonArea(vertices: PipeRoute) -> int:
     sum1 = sum1 + vertices[i][0] *  vertices[i+1][1]
     sum2 = sum2 + vertices[i][1] *  vertices[i+1][0]
   
-  #Add xn.y1
   sum1 = sum1 + vertices[numberOfVertices-1][0]*vertices[0][1]   
-  #Add x1.yn
   sum2 = sum2 + vertices[0][0]*vertices[numberOfVertices-1][1]   
   
   area = abs(sum1 - sum2) / 2
@@ -138,3 +135,4 @@ assert max_distance(test_path2) == 8
 assert num_tiles(test_path3) == 4
 assert num_tiles(test_path4) == 10
 print(max_distance(path))
+print(num_tiles(path))
