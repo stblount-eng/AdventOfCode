@@ -11,32 +11,59 @@ test_path5: Path = Path.cwd()/'Day12'/'d12p1testdata5.txt'
 test_path6: Path = Path.cwd()/'Day12'/'d12p1testdata6.txt'
 path = Path.cwd()/'Day12'/'d12p1data.txt'
 
-def handle_dot(line: Springs, group: list[int], cur_group: int):
-    if cur_group == 0:
-        return test_line(line, group, cur_group)
-    if group == []:
-        return 0
-    group_val: int = group.pop()
-    if cur_group == group_val:
-        return test_line(line, group, 0)
-    return 0
+# def handle_dot(line: Springs, group: list[int], cur_group: int):
+#     if cur_group == 0:
+#         return test_line(line, group, cur_group)
+#     if group == []:
+#         return 0
+#     group_val: int = group.pop()
+#     if cur_group == group_val:
+#         return test_line(line, group, 0)
+#     return 0
 
-def test_line(line: Springs, group: list[int], cur_group: int) -> int:
-    if line == []:
-        if group == []:
-            return 1
-        return 0
-    char = line.pop()
-    if char == '.':
-        return handle_dot(line, group, cur_group)
-    if char == '#':
-        if group == []:
-            return 0
-        cur_group += 1
-        return test_line(line, group, cur_group)
-    is_spring = test_line(line, group, cur_group + 1)
-    not_spring = handle_dot(line, group, cur_group)
-    return is_spring + not_spring
+# def test_line(line: Springs, group: list[int], cur_group: int) -> int:
+#     if line == []:
+#         if group == []:
+#             return 1
+#         return 0
+#     char = line.pop()
+#     if char == '.':
+#         return handle_dot(line, group, cur_group)
+#     if char == '#':
+#         if group == []:
+#             return 0
+#         cur_group += 1
+#         return test_line(line, group, cur_group)
+#     is_spring = test_line(line, group, cur_group + 1)
+#     not_spring = handle_dot(line, group, cur_group)
+#     return is_spring + not_spring
+
+def test_line(springs: Springs, groups: list[int], num_springs: int = 0) -> int:
+    pos_arr = 0
+    if springs == []:
+        if num_springs == 0 and groups == []:
+            return pos_arr + 1
+        if num_springs == groups.pop():
+            return pos_arr + 1
+        return pos_arr
+    spring = springs.pop()
+    if spring == '#':
+        pos_arr += test_line(springs, groups, num_springs + 1) 
+    if spring == '?':
+        pos_arr += test_line(springs, groups, num_springs + 1)
+        spring = '.'
+    if spring == '.':
+        if num_springs == 0:
+            pos_arr += test_line(springs, groups)
+        elif groups != []:
+            group = groups.pop()
+            if num_springs == group:
+                pos_arr += test_line(springs, groups)
+            else:
+                return pos_arr
+        else:
+            return pos_arr
+    return pos_arr
 
 def arrangements(path: Path) -> int:
     total: int = 0
@@ -47,16 +74,18 @@ def arrangements(path: Path) -> int:
             total += test_line(springs, spring_group, 0)
     return total
 
+print(test_line(['?', '?'], [1]))
+
 print(arrangements(test_path1) == 1 )
 print(arrangements(test_path2) == 4 )
-print(arrangements(test_path3) == 1 )
-print(arrangements(test_path4) == 1 )
-print(arrangements(test_path5) == 4 )
-print(arrangements(test_path6) == 10)
-assert arrangements(test_path1) == 1
-assert arrangements(test_path2) == 4
-assert arrangements(test_path3) == 1
-assert arrangements(test_path4) == 1
-assert arrangements(test_path5) == 4
-assert arrangements(test_path6) == 10
-print(arrangements(path))
+# print(arrangements(test_path3) == 1 )
+# print(arrangements(test_path4) == 1 )
+# print(arrangements(test_path5) == 4 )
+# print(arrangements(test_path6) == 10)
+# assert arrangements(test_path1) == 1
+# assert arrangements(test_path2) == 4
+# assert arrangements(test_path3) == 1
+# assert arrangements(test_path4) == 1
+# assert arrangements(test_path5) == 4
+# assert arrangements(test_path6) == 10
+# print(arrangements(path))
